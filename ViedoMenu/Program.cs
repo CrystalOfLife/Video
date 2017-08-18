@@ -1,11 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VideoMenu
 {
     class Program
     {
+        static List<Video> videos = new List<Video>();
+        private static int id = 1;
+
         static void Main(string[] args)
         {
+
+            Video video1 = new Video()
+            {
+                Id = id++,
+                Name = "Generic cat video 329"
+            };
+            videos.Add(video1);
+            videos.Add(new Video()
+            {
+                Id = id++,
+                Name = "Something, something clickbait"
+            });
+
             String[] menuItems = {
                 "List all Videos",
                 "Add Video",
@@ -21,16 +38,16 @@ namespace VideoMenu
                 switch (selection)
                 {
                     case 1:
-                        Console.WriteLine("List Videos\n");
+                        ListVideos();
                         break;
                     case 2:
-                        Console.WriteLine("add Videos\n");
+                        AddVideos();
                         break;
                     case 3:
-                        Console.WriteLine("Delete Videos\n");
+                        DeleteVideos();
                         break;
                     case 4:
-                        Console.WriteLine("Edit Videos\n");
+                        EditVideos();
                         break;
                     default:
                         break;
@@ -40,6 +57,62 @@ namespace VideoMenu
             Console.WriteLine("See ya!");
 
             Console.ReadLine();
+        }
+
+        private static void EditVideos()
+        {
+            var video = FindVideoById();
+            Console.WriteLine("Name: ");
+            video.Name = Console.ReadLine();
+        }
+
+        private static Video FindVideoById()
+        {
+            Console.WriteLine("Insert Video Id: ");
+            int id;
+            while (!int.TryParse(Console.ReadLine(), out id))
+            {
+                Console.WriteLine("Please insert a number");
+            }
+
+            foreach (var video in videos)
+            {
+                if (video.Id == id)
+                {
+                    return video;
+                }
+            }
+            return null;
+        }
+        private static void DeleteVideos()
+        {
+            var videoFound = FindVideoById();
+            if (videoFound != null)
+            {
+                videos.Remove(videoFound);
+            }
+        }
+
+        private static void AddVideos()
+        {
+            Console.WriteLine("Name: ");
+            var name = Console.ReadLine();
+
+            videos.Add(new Video()
+            {
+                Name = name,
+                Id = id++ 
+            });
+        }
+
+        private static void ListVideos()
+        {
+            Console.WriteLine("\nList of Customers");
+            foreach (var video in videos)
+            {
+                Console.WriteLine($"Video: {video.Id} Name: {video.Name}");
+            }
+            Console.WriteLine("\n");
         }
 
         private static int ShowMenu(string[] menuItems)
