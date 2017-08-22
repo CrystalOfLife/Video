@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using VideoMenuDAL;
 using VideoMenuEntity;
@@ -21,32 +22,30 @@ namespace VideoMenuBLL.Services
 
         public Video Delete(int Id)
         {
-            foreach (var video in FakeDB.videos)
-            {
-                if (video.Id == Id)
-                {
-                    FakeDB.videos.Remove(video);
-                    return video;
-                }
-            }
-            return null;
+            var vid = get(Id);
+            FakeDB.videos.Remove(vid);
+            return vid;
         }
 
         public Video get(int Id)
         {
-            throw new NotImplementedException();
+            return FakeDB.videos.FirstOrDefault(x => x.Id == Id);
         }
 
         public List<Video> GetAll()
         {
-            throw new NotImplementedException();
+            return new List<Video>(FakeDB.videos);
         }
 
         public Video Update(Video video)
         {
-            throw new NotImplementedException();
+            var videoFromDb = get(video.Id);
+            if (videoFromDb == null)
+            {
+                throw new InvalidOperationException("Video not found");
+            }
+            videoFromDb.Name = video.Name;
+            return videoFromDb;
         }
-
-
     }
 }

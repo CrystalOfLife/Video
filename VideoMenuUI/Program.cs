@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using VideoMenuBLL;
 using VideoMenuEntity;
 
 namespace VideoMenuUI
 {
     public class Program
     {
+        static BLLFacade bllFacade = new BLLFacade();
         static void Main(string[] args)
         {
-
             Video video1 = new Video()
             {
-                Id = id++,
                 Name = "Generic cat video 329"
             };
-            videos.Add(video1);
-            videos.Add(new Video()
+            bllFacade.VideoService.Create(video1);
+
+            bllFacade.VideoService.Create(new Video()
             {
-                Id = id++,
                 Name = "Something, something clickbait"
             });
 
@@ -60,8 +60,15 @@ namespace VideoMenuUI
         private static void EditVideos()
         {
             var video = FindVideoById();
-            Console.WriteLine("Name: ");
-            video.Name = Console.ReadLine();
+            if (video != null)
+            {
+                Console.WriteLine("Name: ");
+                video.Name = Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("The video dosen't exist");
+            }
         }
 
         private static Video FindVideoById()
@@ -72,13 +79,18 @@ namespace VideoMenuUI
             {
                 Console.WriteLine("Please insert a number");
             }
+            return bllFacade.VideoService.get(id);
         }
         private static void DeleteVideos()
         {
             var videoFound = FindVideoById();
             if (videoFound != null)
             {
-                videos.Remove(videoFound);
+                bllFacade.VideoService.Delete(videoFound.Id);
+            }
+            else
+            {
+                Console.WriteLine("The video dosen't exist");
             }
         }
 
@@ -86,12 +98,17 @@ namespace VideoMenuUI
         {
             Console.WriteLine("Name: ");
             var name = Console.ReadLine();
+
+            bllFacade.VideoService.Create(new Video()
+            {
+                Name = name
+            });
         }
 
         private static void ListVideos()
         {
             Console.WriteLine("\nList of Videos");
-            foreach (var video in videos)
+            foreach (var video in bllFacade.VideoService.GetAll())
             {
                 Console.WriteLine($"Video: {video.Id} Name: {video.Name}");
             }
