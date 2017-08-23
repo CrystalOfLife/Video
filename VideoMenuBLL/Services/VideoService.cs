@@ -9,37 +9,36 @@ namespace VideoMenuBLL.Services
 {
     class VideoService : IVideoService
     {
+        IVideoRepository repo;
+
+        public VideoService(IVideoRepository repo)
+        {
+            this.repo = repo;
+        }
+
         public Video Create(Video video)
         {
-            Video newVideo;
-            FakeDB.videos.Add(newVideo = new Video()
-            {
-                Name = video.Name,
-                Id = FakeDB.Id++
-            });
-            return newVideo;
+            return repo.Create(video);
         }
 
         public Video Delete(int Id)
         {
-            var vid = get(Id);
-            FakeDB.videos.Remove(vid);
-            return vid;
+            return repo.Delete(Id);
         }
 
-        public Video get(int Id)
+        public Video Get(int Id)
         {
-            return FakeDB.videos.FirstOrDefault(x => x.Id == Id);
+            return repo.Get(Id);
         }
 
         public List<Video> GetAll()
         {
-            return new List<Video>(FakeDB.videos);
+            return repo.GetAll();
         }
 
         public Video Update(Video video)
         {
-            var videoFromDb = get(video.Id);
+            var videoFromDb = Get(video.Id);
             if (videoFromDb == null)
             {
                 throw new InvalidOperationException("Video not found");

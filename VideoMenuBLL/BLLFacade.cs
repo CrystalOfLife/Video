@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using VideoMenuBLL.Services;
+using VideoMenuDAL;
 
 namespace VideoMenuBLL
 {
@@ -9,7 +10,7 @@ namespace VideoMenuBLL
     {
         public IVideoService VideoService
         {
-            get { return new VideoService(); }
+            get { return new VideoService(new DALFacade().videoRepository); }
         }
     }
 }

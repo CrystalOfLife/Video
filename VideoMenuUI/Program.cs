@@ -59,16 +59,14 @@ namespace VideoMenuUI
 
         private static void EditVideos()
         {
-            var video = FindVideoById();
-            if (video != null)
+            var videoFound = FindVideoById();
+            if (videoFound != null)
             {
                 Console.WriteLine("Name: ");
-                video.Name = Console.ReadLine();
+                videoFound.Name = Console.ReadLine();
             }
-            else
-            {
-                Console.WriteLine("The video dosen't exist");
-            }
+            var response = videoFound == null ? "The video dosen't exist" : "Video was edited";
+            Console.WriteLine(response);
         }
 
         private static Video FindVideoById()
@@ -79,7 +77,7 @@ namespace VideoMenuUI
             {
                 Console.WriteLine("Please insert a number");
             }
-            return bllFacade.VideoService.get(id);
+            return bllFacade.VideoService.Get(id);
         }
         private static void DeleteVideos()
         {
@@ -88,10 +86,8 @@ namespace VideoMenuUI
             {
                 bllFacade.VideoService.Delete(videoFound.Id);
             }
-            else
-            {
-                Console.WriteLine("The video dosen't exist");
-            }
+            var response = videoFound == null ? "The video dosen't exist" : "Video was Deleted";
+            Console.WriteLine(response);
         }
 
         private static void AddVideos()
