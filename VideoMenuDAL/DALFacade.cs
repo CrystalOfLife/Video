@@ -7,7 +7,7 @@ namespace VideoMenuDAL
 {
     public class DALFacade
     {
-        public IVideoRepository videoRepository
+        public IVideoRepository VideoRepository
         {
             get { return new VideoRepositoryFakeDB(); }
         }
