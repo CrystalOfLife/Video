@@ -9,42 +9,62 @@ namespace VideoMenuBLL.Services
 {
     class VideoService : IVideoService
     {
-        IVideoRepository repo;
+        DALFacade facade;
 
-        public VideoService(IVideoRepository repo)
+        public VideoService(DALFacade facade)
         {
-            this.repo = repo;
+            this.facade = facade;
         }
 
         public Video Create(Video video)
         {
-            return repo.Create(video);
+            using (var uow = facade.UnitOfWork)
+            {
+                var newVideo = uow.VideoRepository.Create(video);
+                uow.Complete();
+                return newVideo;
+            }
         }
 
         public Video Delete(int Id)
         {
-            return repo.Delete(Id);
+            using (var uow = facade.UnitOfWork)
+            {
+                var newVideo = uow.VideoRepository.Delete(Id);
+                uow.Complete();
+                return newVideo;
+            }
         }
 
         public Video Get(int Id)
         {
-            return repo.Get(Id);
+            using (var uow = facade.UnitOfWork)
+            {
+                return uow.VideoRepository.Get(Id);
+            }
         }
 
         public List<Video> GetAll()
         {
-            return repo.GetAll();
+            using (var uow = facade.UnitOfWork)
+            {
+                return uow.VideoRepository.GetAll();
+            }
         }
 
         public Video Update(Video video)
         {
-            var videoFromDb = Get(video.Id);
-            if (videoFromDb == null)
+            using (var uow = facade.UnitOfWork)
             {
-                throw new InvalidOperationException("Video not found");
+                var videoFromDb = uow.VideoRepository.Get(video.Id);
+                if (videoFromDb == null)
+                {
+                    throw new InvalidOperationException("Video not found");
+                }
+                videoFromDb.Name = video.Name;
+                uow.Complete();
+                return videoFromDb;
             }
-            videoFromDb.Name = video.Name;
-            return videoFromDb;
         }
     }
 }

@@ -19,7 +19,6 @@ namespace VideoMenuDAL.Repository
         public Video Create(Video video)
         {
             _context.Videos.Add(video);
-            _context.SaveChanges();
             return video;
         }
 
@@ -27,7 +26,6 @@ namespace VideoMenuDAL.Repository
         {
             var vid = Get(Id);
             _context.Videos.Remove(vid);
-            _context.SaveChanges();
             return vid;
         }
 
