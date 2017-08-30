@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using VideoMenuBLL;
-using VideoMenuEntity;
+using VideoMenuBLL.BusinessObjects;
 
 namespace VideoMenuUI
 {
@@ -10,13 +10,13 @@ namespace VideoMenuUI
         static BLLFacade bllFacade = new BLLFacade();
         static void Main(string[] args)
         {
-            Video video1 = new Video()
+            var video1 = new VideoBO()
             {
                 Name = "Generic cat video 329"
             };
             bllFacade.VideoService.Create(video1);
 
-            bllFacade.VideoService.Create(new Video()
+            bllFacade.VideoService.Create(new VideoBO()
             {
                 Name = "Something, something clickbait"
             });
@@ -70,7 +70,7 @@ namespace VideoMenuUI
             Console.WriteLine(response);
         }
 
-        private static Video FindVideoById()
+        private static VideoBO FindVideoById()
         {
             Console.WriteLine("Insert Video Id: ");
             int id;
@@ -96,7 +96,7 @@ namespace VideoMenuUI
             Console.WriteLine("Name: ");
             var name = Console.ReadLine();
 
-            bllFacade.VideoService.Create(new Video()
+            bllFacade.VideoService.Create(new VideoBO()
             {
                 Name = name
             });

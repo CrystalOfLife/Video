@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VideoMenuDAL.Entities;
+using VideoMenuBLL.BusinessObjects;
 using VideoMenuDAL;
-using VideoMenuEntity;
+using VideoMenuBLL.Converters;
 
 namespace VideoMenuBLL.Services
 {
     class VideoService : IVideoService
     {
+        VideoConverter conv = new VideoConverter();
+
         DALFacade facade;
 
         public VideoService(DALFacade facade)
@@ -16,43 +20,44 @@ namespace VideoMenuBLL.Services
             this.facade = facade;
         }
 
-        public Video Create(Video video)
+        public VideoBO Create(VideoBO video)
         {
             using (var uow = facade.UnitOfWork)
             {
-                var newVideo = uow.VideoRepository.Create(video);
+                var newVideo = uow.VideoRepository.Create(conv.Convert(video));
                 uow.Complete();
-                return newVideo;
+                return conv.Convert(newVideo);
             }
         }
 
-        public Video Delete(int Id)
+        public VideoBO Delete(int Id)
         {
             using (var uow = facade.UnitOfWork)
             {
                 var newVideo = uow.VideoRepository.Delete(Id);
                 uow.Complete();
-                return newVideo;
+                return conv.Convert(newVideo);
             }
         }
 
-        public Video Get(int Id)
+        public VideoBO Get(int Id)
         {
             using (var uow = facade.UnitOfWork)
             {
-                return uow.VideoRepository.Get(Id);
+                return conv.Convert(uow.VideoRepository.Get(Id));
             }
         }
 
-        public List<Video> GetAll()
+        public List<VideoBO> GetAll()
         {
             using (var uow = facade.UnitOfWork)
             {
-                return uow.VideoRepository.GetAll();
+                //return uow.VideoRepository.GetAll();
+                return uow.VideoRepository.GetAll().Select(conv.Convert).ToList();
             }
         }
 
-        public Video Update(Video video)
+        public VideoBO Update(VideoBO video)
         {
             using (var uow = facade.UnitOfWork)
             {
@@ -63,7 +68,7 @@ namespace VideoMenuBLL.Services
                 }
                 videoFromDb.Name = video.Name;
                 uow.Complete();
-                return videoFromDb;
+                return conv.Convert(videoFromDb);
             }
         }
     }

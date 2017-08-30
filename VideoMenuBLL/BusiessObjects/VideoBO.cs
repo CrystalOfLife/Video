@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace VideoMenu
+namespace VideoMenuBLL.BusinessObjects
 {
-    class Video
+    public class VideoBO
     {
         public int Id { get; set; }
         public String Name { get; set; }
